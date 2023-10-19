@@ -1,0 +1,6 @@
+['hello', 'melusine', 'real', 'aloha', 'teri teri', 'real hai', 'truest', 'meow pussy']
+Length: 8
+['hello', 'melusine', 'real', 'aloha', 'teri teri', 'real hai', 'monkey d luffy', 'truest', 'meow pussy']
+Length: 9
+['hello', 'melusine', 'real', 'teri teri', 'real hai', 'monkey d luffy', 'truest', 'meow pussy']
+Length: 8

@@ -1,6 +1,8 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
 
+#include <stdio.h>
+
 #define STRING_DEFAULT_SIZE 8
 
 typedef struct String {
@@ -36,8 +38,8 @@ char *assignstr(String *string, const char *content, int length);
 
 int getstr(String *string, int length);
 static inline char *tostring(String *string) { return string->content; }
-void printstr(String *string);
-void printstr_wquotes(String *string);
+void printstr(String *string, FILE *stream);
+void printstr_wquotes(String *string, FILE *stream);
 
 #endif
 

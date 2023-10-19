@@ -97,13 +97,13 @@ int getstr(String *string, int length)
 	return counter;
 }
 
-void printstr(String *string) {
+void printstr(String *string, FILE *stream) {
 	char *stringptr = string->content;
-	for (; *stringptr; ++stringptr) putchar(*stringptr);
+	for (; *stringptr; ++stringptr) fputc(*stringptr, stream);
 }
 
-void printstr_wquotes(String *string) {
-	putchar('\'');
-	printstr(string);
-	putchar('\'');
+void printstr_wquotes(String *string, FILE *stream) {
+	fputc('\'', stream);
+	printstr(string, stream);
+	fputc('\'', stream);
 }

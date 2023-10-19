@@ -30,19 +30,19 @@ void deletenode(Node *node) {
     free(node);
 }
 
-void printlist(const List *list) {
-    putchar('[');
+void printlist(const List *list, FILE *stream) {
+    fputc('[', stream);
     Node *curr = list->head;
     if (!curr) {
-        putchar(']');
+        fputc(']', stream);
         return;
     }
-    PRINTITEM(curr->value);
+    PRINTITEM(curr->value, stream);
     for (curr = curr->next; curr; curr = curr->next) {
-        fputs(", ", stdout);
-        PRINTITEM(curr->value);
+        fputs(", ", stream);
+        PRINTITEM(curr->value, stream);
     }
-    putchar(']');
+    fputc(']', stream);
 }
 
 Node *getnode(const List *list, int index) {
@@ -118,9 +118,7 @@ void insert(List *list, int index, type value) {
         for (; curr && step > 0; --step)
             curr = curr->prev;
     }
-    puts(curr->value->content);
     Node *node = createnode(value);
-    puts(node->value->content);
     node->next = curr;
     if (curr && curr->prev) curr->prev->next = node;
     else if (curr) {
@@ -146,4 +144,28 @@ void popright(List *list) {
     list->tail = oldtail->prev;
     list->tail->next = NULL;
     deletenode(oldtail);
+}
+
+void pop(List *list, int index) {
+    if (index < 0) index += list->length;               // backward indexing
+    if (index < 0 || index > list->length) return;      // wrong index
+    Node *curr;
+    if (index < list->length/2) {
+        // forward traversal
+        int step = index;       // how many times to loop
+        curr = list->head;
+        for (; curr && step > 0; --step)
+            curr = curr->next;
+    }
+    else {
+        // backward traversal
+        curr = list->tail;
+        int step = list->length - index - 1;
+        for (; curr && step > 0; --step)
+            curr = curr->prev;
+    }
+    if (curr && curr->prev) curr->prev->next = curr->next;
+    if (curr && curr->next) curr->next->prev = curr->prev;
+    deletenode(curr);
+    --list->length;
 }

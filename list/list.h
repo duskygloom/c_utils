@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include "../string/string.h"
+#include <stdio.h>
 
 // modify | to change the type of list
 //        v
@@ -9,7 +10,7 @@ typedef String *type;
 
 // define the following functions
 #define DELETEITEM(item) deletestr(item)
-#define PRINTITEM(item) printstr_wquotes(item)
+#define PRINTITEM(item, stream) printstr_wquotes(item, stream)
 
 /*
     Struct Node:
@@ -34,7 +35,7 @@ List *createlist(void);
 void deletelist(List *list);
 Node *createnode(type value);
 void deletenode(Node *node);
-void printlist(const List *list);
+void printlist(const List *list, FILE *stream);
 Node *getnode(const List *list, int index);
 
 void prepend(List *list, type value);
