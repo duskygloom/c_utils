@@ -23,12 +23,22 @@ String *createstr(const char *content, int length) {
 	return string;
 }
 
+String *createchar(char ch) {
+    String *string = (String *)malloc(sizeof(String));
+	string->size = STRING_DEFAULT_SIZE;
+	string->length = 1;
+	string->content = (char *)malloc(STRING_DEFAULT_SIZE * sizeof(char));
+    string->content[0] = ch;
+	string->content[1] = '\0';
+    return string;
+}
+
 void deletestr(String *string) {
 	free(string->content);
 	free(string);
 }
 
-String *concatchar(String *string, const char ch) {
+String *concatchar(String *string, char ch) {
     if (string->size - string->length <= 1) {
         string->size += STRING_DEFAULT_SIZE;
         string->content = realloc(string->content, string->size);
@@ -39,6 +49,21 @@ String *concatchar(String *string, const char ch) {
     ++stringptr;
     *stringptr = '\0';
     ++string->length;
+    return string;
+}
+
+String *precatchar(String *string, char ch) {
+	char *oldcontent = string->content;
+	if (string->size - string->length <= 1)
+        string->size += STRING_DEFAULT_SIZE;
+    string->content = malloc(sizeof(char) * string->size);
+	char *stringptr = string->content;
+	*stringptr = ch;
+	++stringptr;
+	memcpy(stringptr, oldcontent, string->length);
+	*(stringptr + string->length) = '\0';
+	free(oldcontent);
+	++string->length;
     return string;
 }
 
@@ -54,7 +79,7 @@ String *concatstr(String *string, const char *content, int length) {
 	if (needed >= string->size) {
 		int nblocks = needed / STRING_DEFAULT_SIZE + 1;
 		string->size = nblocks * STRING_DEFAULT_SIZE;
-		string->content = realloc(string->content, string->size);
+		string->content = realloc(string->content, sizeof(char) * string->size);
 	}
 	char *stringptr = string->content;
 	for (; *stringptr; ++stringptr);
@@ -64,17 +89,46 @@ String *concatstr(String *string, const char *content, int length) {
 	return string;
 }
 
+String *precatstr(String *string, const char *content, int length) {
+	char *oldcontent = string->content;
+	int needed = string->length + length;
+	if (needed >= string->size) {
+		int nblocks = needed / STRING_DEFAULT_SIZE + 1;
+		string->size = nblocks * STRING_DEFAULT_SIZE;
+	}
+	string->content = malloc(sizeof(char) * string->size);
+	char *stringptr = string->content;
+	memcpy(stringptr, content, length);
+	stringptr += length;
+	memcpy(stringptr, oldcontent, string->length);
+	*(stringptr + string->length) = '\0';
+	string->length += length;
+    return string;
+}
+
+String *itos(int n) {
+	String *string = blankstr();
+	for (; n > 0; n/=10) precatchar(string, '0' + n%10);
+    return string;
+}
+
+/*
+	Function comparestr:
+		returns -1 if str1 < str2
+		returns 0 if str1 == str2
+		returns 1 if str1 > str2
+*/
 int comparestr(const String *str1, char *str2) {
 	char *strptr1 = str1->content;
 	char *strptr2 = str2;
 	// running the loop till the strings are the same
 	for (; *strptr1 && *strptr2 && *strptr1 == *strptr2; ++strptr1, ++strptr2);
-	// returns if the current strptrs are both '\0'
-	return !(*strptr1 || *strptr2);
+	if (*strptr1 < *strptr2) return -1;
+	else if (*strptr1 == *strptr2) return 0;
+	else return 1;
 }
 
-char *assignstr(String *string, const char *content, int length)
-{
+char *assignstr(String *string, const char *content, int length) {
 	if (!content) return NULL;
 
 	if (length >= string->size) {

@@ -6,19 +6,12 @@
 
 // modify | to change the type of list
 //        v
-typedef String *type;
+typedef float type;
 
 // define the following functions
-#define DELETEITEM(item) deletestr(item)
-#define PRINTITEM(item, stream) printstr_wquotes(item, stream)
+#define DELETEITEM(item) ;
+#define PRINTITEM(item, stream) fprintf(stream, "%f", item)
 
-/*
-    Struct Node:
-        value is a void *
-        so the value must be a pointer and
-            should also be casted into the
-            required type
-*/
 typedef struct Node {
     struct Node *prev;
     struct Node *next;
@@ -35,6 +28,7 @@ List *createlist(void);
 void deletelist(List *list);
 Node *createnode(type value);
 void deletenode(Node *node);
+void printpylist(const List *list, FILE *stream);
 void printlist(const List *list, FILE *stream);
 Node *getnode(const List *list, int index);
 

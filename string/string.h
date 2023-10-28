@@ -12,10 +12,15 @@ typedef struct String {
 
 String *blankstr(void);
 String *createstr(const char *content, int length);
+String *createchar(char ch);
 void deletestr(String *string);
 
-String *concatchar(String *string, const char ch);
+String *concatchar(String *string, char ch);
+String *precatchar(String *string, char ch);
 String *concatstr(String *string, const char *content, int length);
+String *precatstr(String *string, const char *content, int length);
+
+String *itos(int n);
 
 /*
 	Function comparestr:

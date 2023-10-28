@@ -30,7 +30,7 @@ void deletenode(Node *node) {
     free(node);
 }
 
-void printlist(const List *list, FILE *stream) {
+void printpylist(const List *list, FILE *stream) {
     fputc('[', stream);
     Node *curr = list->head;
     if (!curr) {
@@ -43,6 +43,15 @@ void printlist(const List *list, FILE *stream) {
         PRINTITEM(curr->value, stream);
     }
     fputc(']', stream);
+}
+
+void printlist(const List *list, FILE *stream) {
+    Node *curr = list->head;
+    if (curr) PRINTITEM(curr->value, stream);
+    for (curr = curr->next; curr; curr = curr->next) {
+        fputs(" ", stream);
+        PRINTITEM(curr->value, stream);
+    }
 }
 
 Node *getnode(const List *list, int index) {
